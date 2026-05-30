@@ -12,7 +12,6 @@ const News = ({ category, setProgress, pagesize }) => {
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [totalResults, setTotalResults] = useState(0);
     const [nextPageToken, setNextPageToken] = useState(null);
 
     const capitalizeFirstLetter = (string) => {
@@ -49,7 +48,6 @@ const News = ({ category, setProgress, pagesize }) => {
 
             if (parsedData.status === 'success') {
                 setArticles(prev => isLoadMore ? [...prev, ...(parsedData.results || [])] : (parsedData.results || []));
-                setTotalResults(parsedData.totalResults || 0);
                 setNextPageToken(parsedData.nextPage || null);
             } else {
                 // API returned an error (e.g., rate limit)
