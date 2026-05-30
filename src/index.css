@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
+  --font-main: 'Outfit', sans-serif;
+}
+
+body.dark-mode {
   --bg-primary: #0a0a0f;
   --bg-secondary: rgba(20, 20, 25, 0.7);
   --text-primary: #ffffff;
@@ -9,7 +13,23 @@
   --accent-hover: #ff4d7a;
   --glass-border: rgba(255, 255, 255, 0.08);
   --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  --font-main: 'Outfit', sans-serif;
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(255, 51, 102, 0.08), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(51, 102, 255, 0.08), transparent 25%);
+}
+
+body.light-mode {
+  --bg-primary: #f8f9fa;
+  --bg-secondary: rgba(255, 255, 255, 0.8);
+  --text-primary: #1a1a24;
+  --text-secondary: #5a5a6a;
+  --accent-color: #ff3366;
+  --accent-hover: #e62e5c;
+  --glass-border: rgba(0, 0, 0, 0.05);
+  --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(255, 51, 102, 0.04), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(51, 102, 255, 0.04), transparent 25%);
 }
 
 body {
@@ -18,27 +38,20 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--bg-primary);
-  background-image: 
-    radial-gradient(circle at 15% 50%, rgba(255, 51, 102, 0.08), transparent 25%),
-    radial-gradient(circle at 85% 30%, rgba(51, 102, 255, 0.08), transparent 25%);
   color: var(--text-primary);
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
-::-webkit-scrollbar-track {
-  background: var(--bg-primary); 
-}
-::-webkit-scrollbar-thumb {
-  background: #333; 
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-color); 
-}
+body.dark-mode ::-webkit-scrollbar-track { background: var(--bg-primary); }
+body.dark-mode ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+body.light-mode ::-webkit-scrollbar-track { background: var(--bg-primary); }
+body.light-mode ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-color); }
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;

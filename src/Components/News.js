@@ -1,136 +1,158 @@
-import React, { Component } from 'react'
-import NewsComponent from './NewsComponent'
-import Spinner from './Spinner';
-import PropTypes from 'prop-types'
+import React, { useState, useEffect } from 'react';
+import NewsComponent from './NewsComponent';
+import PropTypes from 'prop-types';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import useStore from '../store/useStore';
+import { AlertCircle } from 'lucide-react';
 
+const News = ({ category, setProgress, pagesize }) => {
+    const { country, searchQuery, theme } = useStore();
+    const [articles, setArticles] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [totalResults, setTotalResults] = useState(0);
+    const [nextPageToken, setNextPageToken] = useState(null);
 
-export class News extends Component {
-    static defaultProps = {
-        country: 'us', 
-        pagesize: 5,  
-        category: 'general' 
-    }
-    
-    static propTypes = {
-        country: PropTypes.string,
-        pagesize: PropTypes.number,
-        category: PropTypes.string
-    }
-   
-    capitalizeFirstLetter = (string) => {
+    const capitalizeFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
-    }
+    };
 
-    constructor(props) {
-        super(props); 
-        
-        this.state = {
-            articles: [],
-            loading: false,
-            page: 1,
-            totalResults: 0,
-            nextPageToken: null
-        }
-        document.title = `${this.capitalizeFirstLetter(this.props.category)} - NewsTracker`;
-    }
+    useEffect(() => {
+        document.title = `${capitalizeFirstLetter(category)} - NewsTracker`;
+        // eslint-disable-next-line
+    }, [category]);
 
-    async updateNews(pageToken = null) {
-        const { setProgress } = this.props;
-        setProgress(10);
-
-        let apiCategory = this.props.category === 'general' ? 'top' : this.props.category;
-        let url = `https://newsdata.io/api/1/latest?apikey=pub_0695aae480184832a8d446a1f2e4bd6b&country=${this.props.country}&category=${apiCategory}&language=en`;
-        
-        if (pageToken) {
-            url += `&page=${pageToken}`;
+    const fetchNews = async (isLoadMore = false) => {
+        if (!isLoadMore) {
+            setProgress(10);
+            setLoading(true);
+            setArticles([]);
+            setError(null);
         }
 
-        this.setState({ loading: true });
+        let apiCategory = category === 'general' ? 'top' : category;
+        let url = `https://newsdata.io/api/1/latest?apikey=pub_0695aae480184832a8d446a1f2e4bd6b&country=${country}&category=${apiCategory}&language=en`;
+        
+        if (searchQuery) {
+            url += `&q=${encodeURIComponent(searchQuery)}`;
+        }
+
+        if (isLoadMore && nextPageToken) {
+            url += `&page=${nextPageToken}`;
+        }
 
         try {
             let data = await fetch(url);
             let parsedData = await data.json();
-            console.log(parsedData);
 
-            this.setState({
-                articles: parsedData.results || [], 
-                totalResults: parsedData.totalResults || 0,
-                nextPageToken: parsedData.nextPage || null,
-                loading: false
-            });
-        } catch (error) {
-            console.error("Error fetching news:", error);
-            this.setState({ loading: false });
+            if (parsedData.status === 'success') {
+                setArticles(prev => isLoadMore ? [...prev, ...(parsedData.results || [])] : (parsedData.results || []));
+                setTotalResults(parsedData.totalResults || 0);
+                setNextPageToken(parsedData.nextPage || null);
+            } else {
+                // API returned an error (e.g., rate limit)
+                setError(parsedData.results?.message || parsedData.message || "Daily API request limit reached. Please try again tomorrow.");
+            }
+        } catch (err) {
+            console.error("Error fetching news:", err);
+            setError("Network Error: Could not connect to the news server.");
+        } finally {
+            if (!isLoadMore) {
+                setLoading(false);
+                setProgress(100);
+            }
         }
+    };
 
-        setProgress(100);
-    }
-    
-    async componentDidMount() {
-        this.updateNews();
-    }
+    useEffect(() => {
+        fetchNews();
+        // eslint-disable-next-line
+    }, [category, country, searchQuery]);
 
-    handlenext = async () => {
-        if (this.state.nextPageToken) {
-            this.setState({ page: this.state.page + 1 });
-            this.updateNews(this.state.nextPageToken);
-            window.scrollTo(0, 0);
+    const fetchMoreData = () => {
+        if (nextPageToken) {
+            fetchNews(true);
         }
-    }
-    
-    handleprevious = async () => {
-        // NewsData.io doesn't easily support backward pagination with tokens
-        // So we will just go back to the first page for simplicity
-        this.setState({ page: 1 });
-        this.updateNews();
-        window.scrollTo(0, 0);
-    }
+    };
 
-    render() {
-        return (
-            <>
-            <div className='container' style={{ paddingTop: '90px' }}>
-                <h1 className='page-title'>Top Headlines - <span>{this.capitalizeFirstLetter(this.props.category)}</span></h1>
-                {this.state.loading && <Spinner />}
-                <div className="my-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2rem' }}>
-                    {this.state.articles.map((element, index) => {
-                        return (
-                            <div className="animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }} key={element.article_id || index}>
-                                <NewsComponent 
-                                    title={element.title ? element.title.slice(0, 40) : ""} 
-                                    description={element.description ? element.description.slice(0, 50) : ""} 
-                                    imageUrl={element.image_url}  
-                                    newsUrl={element.link}
-                                    author={element.creator ? element.creator[0] : ""} 
-                                    date={element.pubDate}  
-                                    source={element.source_id}  
-                                />
+    // Skeleton loader component
+    const SkeletonCard = () => (
+        <div className="card h-100 glass-panel" style={{ border: 'none', borderRadius: '15px', overflow: 'hidden' }}>
+            <Skeleton height={200} baseColor={theme === 'dark' ? '#202025' : '#e0e0e0'} highlightColor={theme === 'dark' ? '#333' : '#f5f5f5'} />
+            <div className="card-body d-flex flex-column">
+                <Skeleton count={2} className="mb-3" baseColor={theme === 'dark' ? '#202025' : '#e0e0e0'} highlightColor={theme === 'dark' ? '#333' : '#f5f5f5'} />
+                <Skeleton count={3} baseColor={theme === 'dark' ? '#202025' : '#e0e0e0'} highlightColor={theme === 'dark' ? '#333' : '#f5f5f5'} />
+            </div>
+        </div>
+    );
+
+    return (
+        <>
+            <div className='container' style={{ paddingTop: '90px', paddingBottom: '50px' }}>
+                <h1 className='page-title'>
+                    {searchQuery ? `Search Results for "${searchQuery}"` : `Top Headlines - `}
+                    {!searchQuery && <span>{capitalizeFirstLetter(category)}</span>}
+                </h1>
+                
+                {loading ? (
+                    <div className="my-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2rem' }}>
+                        {[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}
+                    </div>
+                ) : error ? (
+                    <div className="d-flex flex-column align-items-center justify-content-center text-center my-5 py-5 glass-panel" style={{ borderRadius: '15px', border: '1px solid var(--glass-border)' }}>
+                        <AlertCircle size={64} style={{ color: 'var(--accent-color)', marginBottom: '20px' }} />
+                        <h2 style={{ color: 'var(--text-primary)', fontWeight: 'bold' }}>Oops! Something went wrong.</h2>
+                        <p style={{ color: 'var(--text-secondary)', maxWidth: '500px', fontSize: '1.1rem' }}>
+                            {error}
+                        </p>
+                    </div>
+                ) : (
+                    <InfiniteScroll
+                        dataLength={articles.length}
+                        next={fetchMoreData}
+                        hasMore={!!nextPageToken}
+                        loader={
+                            <div className="d-flex justify-content-center my-4">
+                                <div className="modern-spinner"></div>
                             </div>
-                        )
-                    })}
-                </div>
+                        }
+                        style={{ overflow: 'visible' }}
+                    >
+                        <div className="my-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2rem' }}>
+                            {articles.map((element, index) => {
+                                return (
+                                    <div className="animate-fade-in-up" style={{ animationDelay: `${(index % 10) * 0.1}s` }} key={element.article_id || index}>
+                                        <NewsComponent 
+                                            title={element.title ? element.title.slice(0, 40) : ""} 
+                                            description={element.description ? element.description.slice(0, 50) : ""} 
+                                            imageUrl={element.image_url}  
+                                            newsUrl={element.link}
+                                            author={element.creator ? element.creator[0] : ""} 
+                                            date={element.pubDate}  
+                                            source={element.source_id}  
+                                        />
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </InfiniteScroll>
+                )}
             </div>
-            <div className="container d-flex justify-content-between mb-5">
-                <button 
-                    type="button" 
-                    disabled={this.state.page <= 1} 
-                    className="btn btn-modern" 
-                    onClick={this.handleprevious}
-                >
-                    &larr; Previous
-                </button>
-                <button 
-                    type="button" 
-                    disabled={!this.state.nextPageToken} 
-                    className="btn btn-modern" 
-                    onClick={this.handlenext}
-                >
-                    Next &rarr;
-                </button>
-            </div>
-            </>
-        )
-    }
-}
+        </>
+    );
+};
+
+News.defaultProps = {
+    pagesize: 6,
+    category: 'general'
+};
+
+News.propTypes = {
+    pagesize: PropTypes.number,
+    category: PropTypes.string,
+    setProgress: PropTypes.func.isRequired
+};
 
 export default News;

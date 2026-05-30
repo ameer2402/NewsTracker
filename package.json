@@ -4,15 +4,20 @@
   "private": true,
   "homepage": "https://ameer2402.github.io/NewsTracker",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "lucide-react": "^1.17.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-infinite-scroll-component": "^7.2.0",
+    "react-loading-skeleton": "^3.5.0",
     "react-router-dom": "^6.26.1",
     "react-scripts": "5.0.1",
     "react-top-loading-bar": "^2.3.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "zustand": "^5.0.14"
   },
   "scripts": {
     "start": "react-scripts start",
