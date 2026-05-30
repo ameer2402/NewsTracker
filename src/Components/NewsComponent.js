@@ -32,7 +32,7 @@ const NewsComponent = ({ title, description, imageUrl, newsUrl, author, date, so
     try {
       // Note: React requires you to restart your dev server after adding to .env
       const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GEMINI_API_KEY);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
       
       const prompt = `You are a professional news editor. Summarize the following news article in exactly 2 concise, informative bullet points. Do not include introductory text, just the bullet points. \n\nTitle: ${title}\nDescription: ${description}`;
       
