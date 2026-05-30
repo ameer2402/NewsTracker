@@ -28,7 +28,7 @@
 
 ## 🎬 Live Preview
 
-> **[🚀 View Live on Vercel](https://news-tracker-hwudc9f5q-ameers-projects-44e10a15.vercel.app/)** *(Note: AI features require a local API key for security reasons)*
+> **[🚀 View Live on Vercel](https://news-tracker-git-main-ameers-projects-44e10a15.vercel.app/)** *(Note: AI features require a local API key for security reasons)*
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/c992049b-67a5-4d7c-98bc-18ccb701726f" width="85%" alt="NewsApp Home"/>
