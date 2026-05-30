@@ -4,14 +4,14 @@
 
 <h3>📰 A Lightning-Fast, Category-Driven News Aggregator Built with React ⚡</h3>
 
-<p><em>Powered by React • React Router • Bootstrap • Mediastack API</em></p>
+<p><em>Powered by React • React Router • Bootstrap • NewsData.io API</em></p>
 
 <p>
   <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black&labelColor=000000"/>
   <img src="https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white&labelColor=000000"/>
   <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white&labelColor=000000"/>
   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black&labelColor=000000"/>
-  <img src="https://img.shields.io/badge/Mediastack-API-FF6B6B?style=for-the-badge&labelColor=000000"/>
+  <img src="https://img.shields.io/badge/NewsData.io-API-FF6B6B?style=for-the-badge&labelColor=000000"/>
 </p>
 
 <p>
@@ -60,7 +60,7 @@
 
 ## 🌟 Overview
 
-**NewsApp** is a sleek, **responsive single-page web application** built with **React** that fetches and displays the **latest news headlines** in real-time via the **[Mediastack API](https://mediastack.com/)**. With **smooth client-side routing** powered by **React Router** and a **mobile-first responsive design** crafted with **Bootstrap 5**, NewsApp delivers a delightful reading experience across all devices.
+**NewsApp** is a sleek, **responsive single-page web application** built with **React** that fetches and displays the **latest news headlines** in real-time via the **[NewsData.io API](https://newsdata.io/)**. With **smooth client-side routing** powered by **React Router** and a **mobile-first responsive design** crafted with **Bootstrap 5**, NewsApp delivers a delightful reading experience across all devices.
 
 > 💡 **Browse → Filter by category → Read full articles — all in one elegant interface.**
 
@@ -90,7 +90,7 @@ Whether you're catching up on **breaking business news**, the latest in **techno
     </td>
     <td width="50%">
       <h3>🌐 Real-Time News Fetching</h3>
-      <p>Live article retrieval from the <b>Mediastack API</b> — always fresh, always relevant.</p>
+      <p>Live article retrieval from the <b>NewsData.io API</b> — always fresh, always relevant.</p>
     </td>
   </tr>
   <tr>
@@ -146,7 +146,7 @@ Whether you're catching up on **breaking business news**, the latest in **techno
 
 ### 🔥 Component-Driven SPA Architecture
 
-NewsApp follows a **clean component-based architecture** with React Router for routing and Mediastack API as the data source.
+NewsApp follows a **clean component-based architecture** with React Router for routing and NewsData.io API as the data source.
 
 ```text
                 ┌─────────────────────────────┐
@@ -173,13 +173,13 @@ NewsApp follows a **clean component-based architecture** with React Router for r
                                │
                                ▼
                 ┌─────────────────────────────┐
-                │  📡 Mediastack API Fetch    │
+                │  📡 NewsData.io API Fetch    │
                 │  (HTTP GET via fetch/axios) │
                 └──────────────┬──────────────┘
                                │
                                ▼
                 ┌─────────────────────────────┐
-                │  🌍 Mediastack News Server  │
+                │  🌍 NewsData.io News Server  │
                 │  (Live JSON Headlines)      │
                 └─────────────────────────────┘
 ```
@@ -189,7 +189,7 @@ NewsApp follows a **clean component-based architecture** with React Router for r
 1. **User Action** → Clicks category in Navbar
 2. **React Router** → Routes to category-specific component
 3. **Component Mount** → `useEffect` triggers API call on category change
-4. **API Request** → Fetches news from Mediastack with category param
+4. **API Request** → Fetches news from NewsData.io with category param
 5. **State Update** → React state stores articles via `useState`
 6. **Render** → News Grid renders mapped News Cards
 7. **User Click** → "Read More" opens original source in new tab
@@ -208,7 +208,7 @@ NewsApp follows a **clean component-based architecture** with React Router for r
 | 🛣️ **Routing** | `React Router DOM` | Client-side navigation |
 | 🎨 **Styling** | `Bootstrap 5` | Responsive UI & layout |
 | 📡 **HTTP Client** | `Fetch API` / `Axios` | Network requests |
-| 🌐 **News Source** | `Mediastack API` | Real-time news data |
+| 🌐 **News Source** | `NewsData.io API` | Real-time news data |
 | 📦 **Package Mgmt** | `npm` | Dependency management |
 | ⚡ **Build Tool** | `Create React App` / `Vite` | Bundling & dev server |
 | 🟨 **Language** | `JavaScript (ES6+)` | Modern JS features |
@@ -228,7 +228,7 @@ Make sure you have the following installed:
 - 🟢 **[Node.js](https://nodejs.org/)** (v16+ recommended)
 - 📦 **npm** or **yarn**
 - 🔧 **Git**
-- 🔑 **Mediastack API Key** (free tier available)
+- 🔑 **NewsData.io API Key** (free tier available)
 
 ### 1️⃣ Clone the Repository
 
@@ -249,9 +249,9 @@ npm install
 
 ## 🔐 API Configuration
 
-### 3️⃣ Get Your Mediastack API Key
+### 3️⃣ Get Your NewsData.io API Key
 
-1. Visit **[mediastack.com](https://mediastack.com/)**
+1. Visit **[newsdata.io](https://newsdata.io/)**
 2. Sign up for a **free account**
 3. Navigate to your **dashboard**
 4. Copy your **Access Key**
@@ -425,7 +425,7 @@ Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more details
 
 ## 🙏 Acknowledgments
 
-- 📰 **[Mediastack](https://mediastack.com/)** — for the free, reliable news API
+- 📰 **[NewsData.io](https://newsdata.io/)** — for the free, reliable news API
 - ⚛️ **[React Team](https://react.dev/)** — for the incredible UI library
 - 🎨 **[Bootstrap](https://getbootstrap.com/)** — for the responsive CSS framework
 - 🛣️ **[React Router](https://reactrouter.com/)** — for seamless routing
