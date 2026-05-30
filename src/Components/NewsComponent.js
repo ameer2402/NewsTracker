@@ -43,7 +43,11 @@ const NewsComponent = ({ title, description, imageUrl, newsUrl, author, date, so
       setSummary(text);
     } catch (error) {
       console.error("AI Summarization failed:", error);
-      setSummaryError("Failed to generate summary. Please check your API key.");
+      if (!process.env.REACT_APP_GEMINI_API_KEY) {
+        setSummaryError("API Key is missing. Please restart your terminal server (Ctrl+C then npm start).");
+      } else {
+        setSummaryError(`Error: ${error.message}`);
+      }
     } finally {
       setIsSummarizing(false);
     }
