@@ -2,7 +2,6 @@
   "name": "newstracker",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://ameer2402.github.io/NewsTracker",
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@testing-library/jest-dom": "^5.17.0",
